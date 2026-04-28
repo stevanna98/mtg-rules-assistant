@@ -1,11 +1,11 @@
 ---
-title: Mtg Rules Assistant
-emoji: 🌖
-colorFrom: indigo
-colorTo: green
+title: MTG Rules Assistant
+emoji: 🧙
+colorFrom: blue
+colorTo: indigo
 sdk: docker
+app_port: 8000
 pinned: false
-license: mit
 ---
 
 # MTG Rules Assistant
