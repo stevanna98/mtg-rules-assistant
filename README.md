@@ -10,6 +10,8 @@ license: mit
 
 # MTG Rules Assistant
 
+![CI](https://github.com/stevanna98/mtg-rules-assistant/actions/workflows/ci.yml/badge.svg)
+
 A FastAPI service that answers Magic: The Gathering rules questions using the Scryfall API and Claude.
 
 ## Setup
