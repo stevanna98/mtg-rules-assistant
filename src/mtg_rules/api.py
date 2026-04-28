@@ -1,8 +1,19 @@
-from fastapi import FastAPI, HTTPException
-from .scryfall import get_card, search_cards
-from .config import settings
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
-app = FastAPI(title=settings.app_name)
+from fastapi import FastAPI, HTTPException
+
+from .config import settings
+from .scryfall import close_client, get_card, search_cards
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    yield
+    await close_client()
+
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
 
 @app.get("/health")
