@@ -15,14 +15,6 @@ dependencies = [
     "anthropic>=0.28.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-    "pytest-asyncio>=0.23.0",
-    "httpx>=0.27.0",
-    "ruff>=0.4.0",
-]
-
 [tool.hatch.build.targets.wheel]
 packages = ["src/mtg_rules"]
 
@@ -34,12 +26,11 @@ target-version = "py311"
 asyncio_mode = "auto"
 pythonpath = ["."]
 
-[tool.uv.workspace]
-members = [
-    "mtg-rules-assistant",
-]
-
 [dependency-groups]
 dev = [
+    "mypy>=1.10.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
     "pytest-httpx>=0.36.2",
+    "ruff>=0.4.0",
 ]
