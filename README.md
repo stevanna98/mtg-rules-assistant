@@ -15,13 +15,7 @@ A FastAPI service that answers Magic: The Gathering rules questions using the Sc
 ## Setup
 
 ```bash
-pip install -e ".[dev]"
-```
-
-Create a `.env` file:
-
-```
-ANTHROPIC_API_KEY=your_key_here
+uv sync
 ```
 
 ## Run
