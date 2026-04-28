@@ -33,8 +33,8 @@ docker run -p 8000:8000 --env-file .env mtg-rules-assistant
 
 ## API
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health check |
-| POST | `/card` | Look up a card by name |
-| POST | `/search` | Search cards by Scryfall query |
+| Method | Path          | Description                    |
+| ------ | ------------- | ------------------------------ |
+| GET    | /health       | Health check                   |
+| GET    | /card/{name}  | Look up a card by fuzzy name   |
+| GET    | /search?q=... | Search cards by Scryfall query |
