@@ -39,3 +39,21 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t mtg-rules:ci .
+
+  deploy-hf:
+    needs: [lint-and-test, docker-build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_USERNAME: stefanovannoni
+        run: |
+          git config user.email "ci@github.com"
+          git config user.name "GitHub Actions"
+          git push "https://${HF_USERNAME}:${HF_TOKEN}@huggingface.co/spaces/${HF_USERNAME}/mtg-rules-assistant" HEAD:main
