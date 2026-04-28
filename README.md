@@ -33,6 +33,12 @@ docker build -t mtg-rules-assistant .
 docker run -p 8000:8000 --env-file .env mtg-rules-assistant
 ```
 
+## Live demo
+
+Deployed on Hugging Face Spaces: https://stefanovannoni-mtg-rules-assistant.hf.space
+
+First request after a quiet period may take ~30s while the container wakes up.
+
 ## API
 
 | Method | Path          | Description                    |
