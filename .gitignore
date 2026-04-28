@@ -9,3 +9,7 @@ __pycache__/
 dist/
 build/
 .DS_Store
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
