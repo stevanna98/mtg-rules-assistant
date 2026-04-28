@@ -23,6 +23,9 @@ dev = [
     "ruff>=0.4.0",
 ]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/mtg_rules"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
@@ -34,4 +37,9 @@ pythonpath = ["."]
 [tool.uv.workspace]
 members = [
     "mtg-rules-assistant",
+]
+
+[dependency-groups]
+dev = [
+    "pytest-httpx>=0.36.2",
 ]

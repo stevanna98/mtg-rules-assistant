@@ -1,0 +1,10 @@
+{
+    "id": "001",
+    "difficulty": "easy",
+    "category": "single_card",
+    "question": "Does a creature with haste still have summoning sickness for tapping abilities?",
+    "expected_answer": "Yes. Haste only allows attacking and using tap abilities; summoning sickness for activated tap abilities is unaffected by haste.",
+    "expected_rule_refs": ["302.1", "702.10"],
+    "expected_card_refs": [],
+    "source": "https://reddit.com/r/askajudge/..."
+  }
