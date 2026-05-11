@@ -73,9 +73,9 @@ RAG projects struggle with is gift-wrapped here.
 
 ### Embedding model
 
-`voyage-3-lite` (512 dimensions, cosine distance). Free tier covers our
-indexing volume (~2.5M tokens) indefinitely. Decision recorded in the project's
-Notion page; reconsider if recall@10 underperforms in Week 5 evaluation.
+`all-MiniLM-L6-v2` via sentence-transformers (384 dimensions, cosine distance).
+Runs locally — no API key, no rate limits, no cost. Reconsider if recall@10
+underperforms in Week 5 evaluation.
 
 ### LLM for card name extraction
 

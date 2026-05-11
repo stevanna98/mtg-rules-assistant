@@ -1,17 +1,15 @@
-"""Smoke test the Voyage and Groq APIs. One call each, minimal cost."""
+"""Smoke test the embeddings and Groq API."""
 import asyncio
-import voyageai
 from groq import AsyncGroq
 from mtg_rules.config import settings
+from mtg_rules.embeddings import embed_text, VECTOR_SIZE
 
 
 async def main() -> None:
-    # Voyage
-    vo = voyageai.Client(api_key=settings.voyage_api_key)
-    result = vo.embed(["hello world"], model="voyage-3-lite")
-    embedding = result.embeddings[0]
-    assert len(embedding) == 512, f"Expected 512 dims, got {len(embedding)}"
-    print(f"Voyage OK: {len(embedding)}-dim embedding for 'hello world'")
+    # Local embeddings
+    vec = embed_text("hello world")
+    assert len(vec) == VECTOR_SIZE, f"Expected {VECTOR_SIZE} dims, got {len(vec)}"
+    print(f"Embeddings OK: {len(vec)}-dim vector for 'hello world'")
 
     # Groq
     client = AsyncGroq(api_key=settings.groq_api_key)
