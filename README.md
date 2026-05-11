@@ -57,3 +57,28 @@ uv run python -m mtg_rules.rules_parser data/raw/comprehensive_rules.txt data/pr
 
 The raw `.txt` and processed `.jsonl` are gitignored — re-generate locally as needed.
 The latest rules are available at https://magic.wizards.com/en/rules.
+
+## Architecture decisions (Week 4)
+
+### Chunking strategy
+
+One Comprehensive Rules entry = one chunk. Each chunk's embedded text includes
+the rule number, parent rule context (and parent's text where useful), the rule
+body, and any inline examples. The original rule body is preserved separately
+in the payload as `raw_text` for citation.
+
+This works because the Comprehensive Rules are already authored as
+self-contained, hierarchically-numbered units — the chunking decision most
+RAG projects struggle with is gift-wrapped here.
+
+### Embedding model
+
+`voyage-3-lite` (512 dimensions, cosine distance). Free tier covers our
+indexing volume (~2.5M tokens) indefinitely. Decision recorded in the project's
+Notion page; reconsider if recall@10 underperforms in Week 5 evaluation.
+
+### LLM for card name extraction
+
+Groq (Llama 3.3 70B) via the OpenAI-compatible API. Free tier, no billing
+required. Used only for the cards channel extraction step; a more capable model
+will be evaluated for the answering layer in Week 7.
