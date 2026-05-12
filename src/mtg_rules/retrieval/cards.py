@@ -3,8 +3,11 @@
 Given a rules question, extract any MTG card names mentioned, then fetch each
 card's data from Scryfall in parallel.
 """
+
 import asyncio
+import json
 from groq import AsyncGroq
+from groq.types.chat import ChatCompletionToolParam
 from mtg_rules.config import settings
 from mtg_rules.scryfall import get_card
 
@@ -19,7 +22,7 @@ def _get_groq() -> AsyncGroq:
     return _client
 
 
-EXTRACT_CARDS_TOOL = {
+EXTRACT_CARDS_TOOL: ChatCompletionToolParam = {
     "type": "function",
     "function": {
         "name": "register_cards",
@@ -56,16 +59,12 @@ Question: {question}"""
 
 async def extract_card_names(question: str) -> list[str]:
     """Use Groq (Llama 3.3 70B) to extract card names from a rules question."""
-    import json
-
     response = await _get_groq().chat.completions.create(
         model="llama-3.3-70b-versatile",
         max_tokens=512,
         tools=[EXTRACT_CARDS_TOOL],
         tool_choice={"type": "function", "function": {"name": "register_cards"}},
-        messages=[
-            {"role": "user", "content": EXTRACT_PROMPT.format(question=question)}
-        ],
+        messages=[{"role": "user", "content": EXTRACT_PROMPT.format(question=question)}],
     )
     msg = response.choices[0].message
     if msg.tool_calls:
@@ -77,7 +76,7 @@ async def extract_card_names(question: str) -> list[str]:
     return []
 
 
-async def cards_channel(question: str) -> list[dict]:
+async def cards_channel(question: str) -> list[dict]:  # type: ignore[type-arg]
     """Extract card names from a question and fetch their Scryfall data in parallel.
 
     Cards that can't be found on Scryfall are silently dropped.
@@ -91,10 +90,11 @@ async def cards_channel(question: str) -> list[dict]:
         return_exceptions=True,
     )
 
-    cards: list[dict] = []
+    cards: list[dict] = []  # type: ignore[type-arg]
     for name, r in zip(names, results):
         if isinstance(r, Exception):
             print(f"[cards_channel] Could not resolve {name!r}: {r}")
             continue
+        assert isinstance(r, dict)
         cards.append(r)
     return cards

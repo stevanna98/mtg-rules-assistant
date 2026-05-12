@@ -1,6 +1,6 @@
 """Spot-check retrieval quality with hand-written queries."""
+
 from qdrant_client import QdrantClient
-from qdrant_client.models import Query
 from mtg_rules.config import settings
 from mtg_rules.embeddings import embed_text
 
@@ -29,11 +29,7 @@ def main() -> None:
         for h in hits:
             rn = h.payload["rule_number"]
             print(f"  {h.score:.3f}  {rn}  {h.payload['raw_text'][:80]}")
-        found = any(
-            h.payload["rule_number"].startswith(p)
-            for h in hits
-            for p in expected_prefixes
-        )
+        found = any(h.payload["rule_number"].startswith(p) for h in hits for p in expected_prefixes)
         print(f"  → {'FOUND' if found else 'MISSING'}")
 
 
