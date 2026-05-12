@@ -58,6 +58,27 @@ uv run python -m mtg_rules.rules_parser data/raw/comprehensive_rules.txt data/pr
 The raw `.txt` and processed `.jsonl` are gitignored — re-generate locally as needed.
 The latest rules are available at https://magic.wizards.com/en/rules.
 
+## Local development setup (Week 4+)
+
+Beyond the basic setup, you'll need:
+
+1. A Groq API key in `.env` as `GROQ_API_KEY` (free at console.groq.com)
+2. Qdrant running locally:
+```bash
+docker run -d -p 6333:6333 -p 6334:6334 \
+  -v "$(pwd)/data/qdrant_storage:/qdrant/storage" \
+  --name qdrant qdrant/qdrant
+```
+3. Initialize and index the rules collection:
+```bash
+uv run python scripts/init_qdrant.py
+uv run python scripts/index_rules.py
+```
+4. Sanity-check retrieval:
+```bash
+uv run python scripts/sanity_check_retrieval.py
+```
+
 ## Architecture decisions (Week 4)
 
 ### Chunking strategy
