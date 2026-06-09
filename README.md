@@ -101,5 +101,40 @@ underperforms in Week 5 evaluation.
 ### LLM for card name extraction
 
 Groq (Llama 3.3 70B) via the OpenAI-compatible API. Free tier, no billing
-required. Used only for the cards channel extraction step; a more capable model
-will be evaluated for the answering layer in Week 7.
+required. Used only for the cards channel extraction step (JSON mode — tool
+calling proved flaky on Groq and crashed the channel on malformed calls).
+
+## Architecture decisions (retrieval/answering revamp, June 2026)
+
+### Hybrid retrieval with RRF fusion
+
+The rules channel fuses several candidate lists with Reciprocal Rank Fusion:
+
+- dense ANN lists for the raw question AND 2-3 multi-aspect HyDE passages
+  (each passage covers a different rules concept implicated by the question);
+- one lexical BM25 list (in-memory over all ~3.3k rules), queried with
+  question + HyDE passages so the lexical match happens in Comprehensive
+  Rules vocabulary rather than casual phrasing.
+
+RRF is scale-free, which fixes the earlier max-score merge where the HyDE
+list's higher cosine scores drowned out the raw-question list. HyDE passages
+are generated at temperature 0 with a fixed seed (Groq is still not perfectly
+deterministic), and any invented rule numbers are stripped before embedding —
+they poisoned BM25 otherwise.
+
+### Answering model
+
+`openai/gpt-oss-120b` on Groq (free tier). Llama 3.3 70B produced correct-ish
+retrievals but failed multi-step stack reasoning (e.g. it believed Giant
+Growth's +3/+3 expires when the spell finishes resolving). The reasoning model
+took the LLM-judged answer score from 6/12 to 12/12 on the eval set.
+
+### Evaluation
+
+```bash
+uv run python scripts/eval_retrieval.py --k 5   # retrieval recall/MRR
+uv run python scripts/eval_answers.py --k 8     # end-to-end LLM-judged answers
+```
+
+The answer judge is Llama 3.3 70B (different family from the answerer, to
+limit self-preference bias); grades each answer 0-2 against the reference.
