@@ -23,8 +23,9 @@ WORKDIR /app
 # Copy the virtual environment from builder
 COPY --from=builder /app/.venv /app/.venv
 
-# Copy your application code
+# Copy application code and PWA frontend
 COPY src/ ./src/
+COPY frontend/ ./frontend/
 
 # Use the venv's python
 ENV PATH="/app/.venv/bin:$PATH"

@@ -1,4 +1,5 @@
 """Smoke test the embeddings and Groq API."""
+
 import asyncio
 from groq import AsyncGroq
 from mtg_rules.config import settings

@@ -1,11 +1,12 @@
 """Initialize the Qdrant `rules` collection. Idempotent — safe to re-run."""
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from mtg_rules.config import settings
+from mtg_rules.embeddings import VECTOR_SIZE
 
 
 COLLECTION_NAME = "rules"
-VECTOR_SIZE = 512  # voyage-3-lite
 
 
 def main() -> None:

@@ -2,6 +2,7 @@
 
 Idempotent — re-running re-indexes from scratch. Run this whenever the rules update.
 """
+
 import json
 from pathlib import Path
 from qdrant_client import QdrantClient
